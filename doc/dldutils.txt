@@ -1,0 +1,107 @@
+*dldutils.txt*               Personal utilities for Vim/Neovim
+
+==============================================================================
+INTRODUCTION                                                   *dldutils*
+
+This plugin collects small personal utilities written in Vimscript and
+Python, designed to work in both Vim and Neovim.
+
+REQUIREMENTS ~
+
+    - A working `python3` executable in `$PATH`.
+    - The Python `tabulate` library for commands that depend on it:
+          pip install tabulate
+
+INSTALLATION ~
+
+Vim (Vundle) example:
+
+    Plugin 'davidlowryduda/dldutils.vim'
+
+After installing, if necessary, generate helptags once:
+
+    :helptags ~/.vim/bundle/dldutils/doc
+
+Neovim (lazy.nvim) example:
+
+    { "davidlowryduda/dldutils.vim", lazy = false },
+
+lazy.nvim automatically generates helptags, so `:help dldutils` should
+work without extra steps.
+
+==============================================================================
+TABLES / CSV                                                   *dldutils-tables*
+
+The following command operates on CSV data (comma-separated values)
+and formats it as a Markdown pipe table using Python's `tabulate`
+library.
+
+:TabulateSelection                                              *:TabulateSelection*
+    Format the current range (usually a Visual selection) as a
+    Markdown pipe table.
+
+    The input is treated as CSV with the first line as headers.
+
+    Requirements:
+        - `python3` on your system PATH.
+        - Python package `tabulate` installed for python3.
+
+    Example input (each line comma-separated):
+
+        Dec 21,Slurm Stats
+        GPU Jobs,2656
+        Complete,2291
+        Preempted,44
+        Failed,296
+        Timed Out,25
+
+    Example usage:
+
+        1. In Visual mode, select the lines containing the CSV.
+        2. Run:
+
+               :'<,'>TabulateSelection
+
+           or (with the default mapping):
+
+               <leader>tt
+
+    Example output:
+
+        | Dec 21    | Slurm Stats |
+        |-----------|-------------|
+        | GPU Jobs  | 2656        |
+        | Complete  | 2291        |
+        | Preempted | 44          |
+        | Failed    | 296         |
+        | Timed Out | 25          |
+
+
+==============================================================================
+TODO NAVIGATION                                                *myutils-todo*
+
+These commands navigate between unchecked TODO items of the form `[ ]`.
+
+:NextTodo                                                      *:NextTodo*
+    Jump to the next occurrence of `[ ]` after the cursor on the
+    current buffer line/lines. Implemented in Lua and requires Vim/Neovim
+    compiled with +lua support.
+
+:PrevTodo                                                      *:PrevTodo*
+    Jump to the previous occurrence of `[ ]` before the cursor.
+
+
+==============================================================================
+MAPPINGS                                                       *dldutils-mappings*
+
+By default, no mappings are defined.
+
+
+==============================================================================
+INDEX                                                          *dldutils-index*
+
+    :NextTodo - jump to next Todo
+    :PrevTodo - jump to previous Todo
+    :TabulateSelection - format CSV selection as Markdown table
+
+vim:tw=78:ft=help
