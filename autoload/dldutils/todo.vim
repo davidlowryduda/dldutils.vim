@@ -26,7 +26,7 @@ if exists('*dldutils#todo#next')
 endif
 
 function! dldutils#todo#next() abort
-  let l:pos = search('\[ \]', 'w')
+  let l:pos = search('\[\zs \]', 'w')
   if l:pos == 0
     echohl WarningMsg
     echom '[dldutils] no [ ] todo found.'
@@ -35,7 +35,7 @@ function! dldutils#todo#next() abort
 endfunction
 
 function! dldutils#todo#prev() abort
-  let l:pos = search('\[ \]', 'bw')
+  let l:pos = search('\[\zs \]', 'bw')
   if l:pos == 0
     echohl WarningMsg
     echom '[dldutils] no [ ] todo found.'
