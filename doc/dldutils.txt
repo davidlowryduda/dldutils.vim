@@ -92,6 +92,34 @@ These commands navigate between unchecked TODO items of the form `[ ]`.
 
 
 ==============================================================================
+LINK GENERATION                                                *dldutils-link*
+
+:MakeLink                                                      *:MakeLink*
+    Generate a Markdown link to the current file and copy it to the
+    system clipboard.
+
+    If the cursor is on an ATX-style header line (e.g., `## Header`),
+    the link text will be the header text and an anchor will be appended:
+
+        [Header Text](./path/to/file.md#header-text)
+
+    If the cursor is not on a header line, the link text will be the
+    filename:
+
+        [file.md](./path/to/file.md)
+
+    The path is relative to the current working directory. Files in the
+    CWD use a `./` prefix.
+
+    Anchor generation rules:
+        - Lowercase
+        - Spaces become hyphens
+        - Non-alphanumeric characters (except hyphens) are stripped
+        - Consecutive hyphens are collapsed to one
+        - Leading/trailing hyphens are removed
+
+
+==============================================================================
 MAPPINGS                                                       *dldutils-mappings*
 
 By default, no mappings are defined.
@@ -100,6 +128,7 @@ By default, no mappings are defined.
 ==============================================================================
 INDEX                                                          *dldutils-index*
 
+    :MakeLink - generate Markdown link to current file/header
     :NextTodo - jump to next Todo
     :PrevTodo - jump to previous Todo
     :TabulateSelection - format CSV selection as Markdown table

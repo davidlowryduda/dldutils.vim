@@ -47,3 +47,6 @@ command! -range TabulateSelection call dldutils#tables#tabulate_selection(<line1
 " Next and Previous Todo items
 command! NextTodo call dldutils#todo#next()
 command! PrevTodo call dldutils#todo#prev()
+
+" Generate a markdown link to the current file (and header if on one)
+command! MakeLink call dldutils#link#make()
