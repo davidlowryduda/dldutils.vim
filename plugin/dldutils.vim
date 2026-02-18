@@ -50,3 +50,6 @@ command! PrevTodo call dldutils#todo#prev()
 
 " Generate a markdown link to the current file (and header if on one)
 command! MakeLink call dldutils#link#make()
+
+" Open markdown link under cursor, navigating to anchor if present
+command! OpenMDAnchor call dldutils#mdanchor#open()
