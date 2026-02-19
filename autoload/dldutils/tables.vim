@@ -47,15 +47,9 @@ function! dldutils#tables#tabulate_selection(first, last) range
   let l:input = join(l:lines, "\n")
 
   " Python snippet: read CSV from stdin and print a markdown pipe table
-  let l:py = [
-        \ 'import sys, csv',
-        \ 'from tabulate import tabulate',
-        \ 'rows = list(csv.reader(sys.stdin))',
-        \ 'if not rows: sys.exit(0)',
-        \ 'print(tabulate(rows, headers="firstrow", tablefmt="pipe"))',
-        \ ]
+  let l:pyscript = 'import sys,csv;from tabulate import tabulate;rows=list(csv.reader(sys.stdin));print(tabulate(rows,headers="firstrow",tablefmt="pipe") if rows else "")'
 
-  let l:cmd = 'python3 -c ' . shellescape(join(l:py, ';')) . ' 2>&1'
+  let l:cmd = 'python3 -c ' . shellescape(l:pyscript) . ' 2>&1'
 
   " Call python with the selection as stdin
   let l:out = system(l:cmd, l:input)
