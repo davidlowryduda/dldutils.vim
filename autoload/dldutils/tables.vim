@@ -51,8 +51,7 @@ function! dldutils#tables#tabulate_selection(first, last) range
         \ 'import sys, csv',
         \ 'from tabulate import tabulate',
         \ 'rows = list(csv.reader(sys.stdin))',
-        \ 'if not rows:',
-        \ '    sys.exit(0)',
+        \ 'if not rows: sys.exit(0)',
         \ 'print(tabulate(rows, headers="firstrow", tablefmt="pipe"))',
         \ ]
 
