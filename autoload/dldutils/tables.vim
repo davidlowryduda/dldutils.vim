@@ -43,42 +43,53 @@ function! dldutils#tables#tabulate_selection(first, last) range
     return
   endif
 
-  " Join lines with newlines for stdin to python
-  let l:input = join(l:lines, "\n")
+  " Store input for Python to access, and prepare result variables
+  let s:_tabulate_input = l:lines
+  let s:_tabulate_result = []
+  let s:_tabulate_error = ''
 
-  " Python snippet: read CSV from stdin and print a markdown pipe table
-  let l:pyscript = 'import sys,csv;from tabulate import tabulate;rows=list(csv.reader(sys.stdin));print(tabulate(rows,headers="firstrow",tablefmt="pipe") if rows else "")'
+python3 << EOF
+import vim
+import csv
+import io
 
-  let l:cmd = 'python3 -c ' . shellescape(l:pyscript) . ' 2>&1'
+try:
+    from tabulate import tabulate
 
-  " Call python with the selection as stdin
-  let l:out = system(l:cmd, l:input)
+    lines = vim.eval('s:_tabulate_input')
+    csv_text = '\n'.join(lines)
+    rows = list(csv.reader(io.StringIO(csv_text)))
 
-  " Basic error reporting if python exits non-zero
-  if v:shell_error != 0
+    if rows:
+        result = tabulate(rows, headers="firstrow", tablefmt="pipe")
+        # Store result back to Vim
+        vim.command("let s:_tabulate_result = " + repr(result.split('\n')))
+except ImportError:
+    vim.command("let s:_tabulate_error = 'tabulate package not installed'")
+except Exception as e:
+    vim.command("let s:_tabulate_error = " + repr(str(e)))
+EOF
+
+  " Check for errors
+  if s:_tabulate_error != ''
     echohl ErrorMsg
-    echom '[dldutils] python3/tabulate error (exit code ' . v:shell_error . ').'
-    echom '[dldutils] Is the "tabulate" package installed for python3?'
-    echom '[dldutils] Error output: ' . l:out
+    echom '[dldutils] python3/tabulate error: ' . s:_tabulate_error
     echohl None
     return
   endif
 
-  " Replace the original lines with the output
-  let l:out_lines = split(l:out, "\n", 1)
-
   " In case python produced nothing, avoid deleting everything silently
-  if empty(l:out_lines)
+  if empty(s:_tabulate_result)
     echohl WarningMsg
     echom '[dldutils] No output from python3/tabulate.'
     echohl None
     return
   endif
 
-  call setline(a:first, l:out_lines)
+  call setline(a:first, s:_tabulate_result)
 
   " Delete any leftover original lines if output is shorter
-  let l:new_last = a:first + len(l:out_lines) - 1
+  let l:new_last = a:first + len(s:_tabulate_result) - 1
   if l:new_last < a:last
     execute (l:new_last + 1) . ',' . a:last . 'delete _'
   endif
