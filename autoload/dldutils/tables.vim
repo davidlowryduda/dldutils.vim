@@ -55,7 +55,7 @@ function! dldutils#tables#tabulate_selection(first, last) range
         \ 'print(tabulate(rows, headers="firstrow", tablefmt="pipe"))',
         \ ]
 
-  let l:cmd = 'python3 -c ' . shellescape(join(l:py, ';'))
+  let l:cmd = 'python3 -c ' . shellescape(join(l:py, ';')) . ' 2>&1'
 
   " Call python with the selection as stdin
   let l:out = system(l:cmd, l:input)
@@ -65,6 +65,7 @@ function! dldutils#tables#tabulate_selection(first, last) range
     echohl ErrorMsg
     echom '[dldutils] python3/tabulate error (exit code ' . v:shell_error . ').'
     echom '[dldutils] Is the "tabulate" package installed for python3?'
+    echom '[dldutils] Error output: ' . l:out
     echohl None
     return
   endif
