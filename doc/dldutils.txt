@@ -120,6 +120,26 @@ LINK GENERATION                                                *dldutils-link*
 
 
 ==============================================================================
+LINK FOLLOWING                                                 *dldutils-mdanchor*
+
+:OpenMDAnchor                                                  *:OpenMDAnchor*
+    Open the Markdown link under the cursor. If the link contains an
+    anchor (e.g., `#section-name`), navigate to that header in the
+    target file.
+
+    Link formats supported:
+        - `[text](file.md)` - opens file.md
+        - `[text](file.md#anchor)` - opens file.md and jumps to anchor
+        - `[text](#anchor)` - jumps to anchor in current file
+
+    Paths are resolved relative to the current file's directory.
+
+    Anchor matching is case-insensitive and reverses the standard
+    anchor generation rules, so `#some-section` will match headers
+    like "Some Section", "some section!", etc.
+
+
+==============================================================================
 MAPPINGS                                                       *dldutils-mappings*
 
 By default, no mappings are defined.
@@ -130,6 +150,7 @@ INDEX                                                          *dldutils-index*
 
     :MakeLink - generate Markdown link to current file/header
     :NextTodo - jump to next Todo
+    :OpenMDAnchor - open Markdown link under cursor with anchor support
     :PrevTodo - jump to previous Todo
     :TabulateSelection - format CSV selection as Markdown table
 
